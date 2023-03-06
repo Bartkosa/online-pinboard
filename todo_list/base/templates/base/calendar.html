@@ -1,0 +1,53 @@
+{% extends 'base/main.html' %}
+{% load bootstrap_icons %}
+{% block content %}
+    <a class="button-back" style="margin-left: 25%" href="{% url 'tasks' %}">← Back</a>
+    <a class="button-back" style="margin-left: 30%" href="{% url 'event-create' %}"><i
+            class="bi bi-plus-circle-fill"></i> Add new event</a>
+    <div class="outside-cal">
+        <div class="calendar">
+            <div class="top-of-cal">
+                <div class="prev-month">
+                    {% if month != 'January' %}
+                        <a href="/calendar/{{ year }}/{{ prev_month }}"><< Previous Month </a>
+                    {% else %}
+                        <a href="/calendar/{{ year|add:"-1" }}/{{ prev_month }}"><< Previous Month </a>
+                    {% endif %}
+                </div>
+                <div class="prev-month">
+                    {{ time }}
+                </div>
+                <div class="prev-month">
+                    {% if month != 'December' %}
+                        <a href="/calendar/{{ year }}/{{ next_month }}"> Next Month >></a>
+                    {% else %}
+                        <a href="/calendar/{{ year|add:"1" }}/{{ next_month }}"> Next Month >></a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="calendar-main">
+                {{ cal|safe }}
+            </div>
+        </div>
+    </div>
+    <div class="events-main">
+            <h3>Events in this month: </h3>
+        <form method="GET">
+            <input style="width: 170px; height: 20px; border-radius: 10px" type='text' name="search-area"
+                   value="{{ search_input }}">
+            <button style="background-color: transparent; border: none;" type="submit"><i
+                    class="bi bi-search"></i>
+            </button>
+        </form>
+        {% for event in events %}
+            <div class="habit-div">
+                <a href="{% url 'event-update' event.id %}">{{ event.title }}</a>
+                <p style="font-size: small">{{ event.start_date }}</p>
+                <a href="{% url 'event-delete' event.id %}"><i style="color: red;"
+                                                               class="bi bi-x-circle-fill"></i></a>
+            </div>
+        {% empty %}
+            <h3>No events this month</h3>
+        {% endfor %}
+    </div>
+{% endblock content %}

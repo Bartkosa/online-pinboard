@@ -1,0 +1,11 @@
+{% extends 'base/main.html' %}
+{% block content %}
+<div class="form-container">
+    <a class="button-back" href='{{ object.get_absolute_url }}'>← Back</a>
+    <form method="POST">
+        {% csrf_token %}
+        <p>Are you sure to delete the <b>{{ event }}</b> event?</p>
+        <input value="Delete" type="submit"/>
+    </form>
+</div>
+{% endblock content %}

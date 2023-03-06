@@ -1,0 +1,65 @@
+{% extends 'base/main.html' %}
+{% load bootstrap_icons %}
+
+{% block content %}
+    <div class="first-container">
+        <div class="first-box">
+            <h1>Hello {{ request.user|title }}</h1>
+            <h3>You have <i>{{ count }}</i> task{{ count|pluralize:"s" }} left today</h3>
+        </div>
+        <div class="habits-main">
+            <h2>Daily habits:</h2>
+            <a href="{% url 'habit-create' %}"><i class="bi bi-plus-circle-fill"></i> Add new habit</a>
+            {% for habit in habits %}
+                <div class="habit-div">
+                    {% if habit.complete %}
+                        <s><a href="{% url 'habit-update' habit.id %}">{{ habit.title }}</a></s>
+                        <a href="{% url 'habit-delete' habit.id %}"><i style="color: red;"
+                                                                       class="bi bi-x-circle-fill"></i></a>
+                    {% else %}
+                        <a href="{% url 'habit-update' habit.id %}">{{ habit.title }}</a>
+                        <a href="{% url 'habit-delete' habit.id %}"><i style="color: red;"
+                                                                       class="bi bi-x-circle-fill"></i></a>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <h3>No habits today :)</h3>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="cal-link">
+        <a href="{% url 'calendar' year=year month=month %}">
+            {{ cal|safe }}
+        </a>
+    </div>
+    {% if request.user.is_authenticated %}
+        <a class="button" style="position: absolute; right: 50px; top: 20px;" href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <a class="button" href="{% url 'login' %}">Login</a>
+    {% endif %}
+
+    <div class="tasks-main">
+        <a href="{% url 'task-create' %}"><i class="bi bi-plus-circle-fill"></i> Add new task</a>
+        <h2>Find the task:</h2>
+        <form method="GET">
+            <input style="width: 170px; height: 20px; border-radius: 10px" type='text' name="search-area"
+                   value="{{ search_input }}">
+            <button style="background-color: transparent; border: none;" type="submit"><i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+    <div class="tasks-container">
+        {% for task in tasks %}
+            <div class="taskdiv">
+                <div style="cursor: move;" id="taskdivheader"><i style="color: green" class="bi bi-pin-angle-fill"></i></div>
+                <div style="justify-content: space-between;align-items: center;display: flex;">
+                    <a href="{% url 'task-update' task.id %}"><b>{{ task.title }}</b></a>
+                    <a href="{% url 'task-delete' task.id %}"><i style="color: red;"
+                                                                 class="bi bi-x-circle-fill"></i></a>
+                </div>
+                <p style="margin: 0px; max-height: 100px; width: 100px; font-size: 15px">{{ task.description }}</p>
+            </div>
+        {% endfor %}
+</div>
+{% endblock content %}

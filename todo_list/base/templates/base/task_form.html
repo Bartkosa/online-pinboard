@@ -1,0 +1,13 @@
+{% extends 'base/main.html' %}
+{% block content %}
+<div style="background-color: #f6eb09" class="form-container">
+    <a class="button-back" href="{% url 'tasks' %}">← Back</a>
+    <h3 style="margin-left: 20%"><b>{% if object %}Edit{% else %}Add{% endif %} your Task</b></h3>
+    <form style="margin-left: 20%; margin-right: 40%" method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+
+    </form>
+</div>
+{% endblock content %}
